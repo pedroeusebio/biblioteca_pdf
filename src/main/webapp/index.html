@@ -10,7 +10,7 @@
         <script type="text/javascript" src="js/js_index.js"></script>
     </head>
 
-    <body id="idBody" >
+    <body id="idBody" onload="iniciar();">
         <div id="idDivMaisExterna">
             <h2>Biblio PDF  <font style="font-size:13pt;color:blue;font-weight:normal;">v0.1 Beta&nbsp; &copy;J.L.S.Leão, 2015 - jorge.leao@ufrj.br</font></h2>
 
@@ -136,7 +136,7 @@
                     <tr valign="top">
                         <td align="center" colspan="3">
                             <input type="button" value="BUSCAR" id="idBuscar"/>
-                            <input type="button" value="LIMPAR" id="idLimparBusca"/>
+                            <input type="button" value="LIMPAR" id="idLimparBusca" onclick="limparbusca();"/>
                         </td>
                     </tr>
                 </table>
