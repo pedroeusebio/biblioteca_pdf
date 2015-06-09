@@ -1,0 +1,82 @@
+
+#idBody {
+    background-color:#eeeeee;
+    margin:0px;
+    font-family:arial;
+}
+
+#idDivMaisExterna {
+    width:950px;
+    height:550px;
+    margin-left:auto;
+    margin-right:auto;
+    background-color:#eeeeee;
+    text-align:center;
+}
+
+#idDivLogin {
+    text-align:center;
+}
+
+#idDivBusca {
+    text-align:center;
+}
+
+#idDivCatalogacao {
+    text-align:center;
+}
+
+tr{
+    height:27px;
+}
+
+input[type="button"]{
+    width:170px;
+}
+
+input[type="text"]{
+    width:550px;
+}
+
+#idTabelaResultados {
+    background-color:white;
+    border:1px solid gray;
+    width:645px;
+    height:200px;
+    overflow-y:scroll;
+}
+
+#idRespAutorizacao {
+    color:black;
+    font-weight:bold;
+}
+
+#idComentarios {
+    background-color:white;
+    border:1px solid gray;
+    width:650px;
+    height:100px;
+    overflow-y:scroll;
+}
+
+#idNovoComentario {
+    width:648px;
+    height:100px;
+    resize:none;
+    border:1px solid gray;
+}
+
+#idMsgDialogo2 {
+    width:890px;
+    text-align:center;
+}
+
+#idMsgDialogo3 {
+    width:890px;
+    text-align:center;
+}
+
+#idInputTypeFile {
+    width:555px;
+    background-color:white;
+}

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BiblioPDF</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="icon" href="http://localhost:8084/bibliopdf/favicon.ico" type="image/x-icon"> 
+        <link rel="shortcut icon" href="http://localhost:8084/bibliopdf/favicon.ico" type="image/x-icon">         
+        <link rel="stylesheet" href="css/bibliopdf.css" type="text/css"/>
+        <script language="JavaScript" type="text/javascript" src="js/jquery-1.4.2.js"></script>
+        <script type="text/javascript" src="js/js_index.js"></script>
+    </head>
+
+    <body id="idBody" >
+        <div id="idDivMaisExterna">
+            <h2>Biblio PDF  <font style="font-size:13pt;color:blue;font-weight:normal;">v0.1 Beta&nbsp; &copy;J.L.S.Leão, 2015 - jorge.leao@ufrj.br</font></h2>
+
+            <!--==========================================================================-->
+            <div id="idDivLogin">
+                <br>
+                <br>
+                <br>
+                Usuário<br>
+                <input id="idUsuario" type="text"     style="width:200px;"/><br>
+                Senha<br>
+                <input id="idSenha"   type="password" style="width:200px;"/><br>
+                <br>
+                <div id="idRespAutorizacao"></div>
+                <br>
+                <br>
+                <a href="#"
+                   style="text-decoration:none;color:red;font-weight:bold;"
+                   onclick="mostrarDiv(2);">
+                        ENTRAR
+                </a>
+            </div>
+            <!--==========================================================================-->
+            <div id="idDivBusca">
+                <table align="center" border="0">
+                    <tr>
+                        <td width="190" align="left" style="color:red;font-weight:bold;">
+                            <a href="#" style="text-decoration:none;color:red;" onclick="mostrarDiv(3);">CATALOGAÇÃO</a>
+                        </td>
+                        <td width="540" align="center" style="font-weight:bold;font-size:14pt;">
+                            BUSCA
+                        </td>
+                        <td width="160" align="right" style="color:red;font-weight:bold;">
+                            <a href="#" style="text-decoration:none;color:red;" onclick="mostrarDiv(1);">SAIR</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="idMsgDialogo2" colspan="3">
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            #Patrimônio
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text"     id="idpatrimonio2"/>
+                            <input type="checkbox" id="idcheckpatrimonio"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Título
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text"     id="idtitulo2"/>
+                            <input type="checkbox" id="idchecktituloOU"/>(OU)
+                            <input type="checkbox" id="idchecktituloE"/>(E)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Autoria
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text"     id="idautoria2"/>
+                            <input type="checkbox" id="idcheckautoriaOU"/>(OU)
+                            <input type="checkbox" id="idcheckautoriaE"/>(E)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Veículo
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text"     id="idveiculo2"/>
+                            <input type="checkbox" id="idcheckveiculoOU"/>(OU)
+                            <input type="checkbox" id="idcheckveiculoE"/>(E)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Data da publicação
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text"     id="iddatapublicacao2"/>
+                            <input type="checkbox" id="idcheckdatapublicacaoOU"/>(OU)
+                            <input type="checkbox" id="idcheckdatapublicacaoE"/>(E)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Palavras-chave
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text"     id="idpalchave2"/>
+                            <input type="checkbox" id="idcheckpalchaveOU"/>(OU)
+                            <input type="checkbox" id="idcheckpalchaveE"/>(E)
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="right">
+                            Resultados
+                        </td>
+                        <td align="left" colspan="2">
+                            <div id="idTabelaResultados">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="3">
+                            Nro. da página de resultados
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="3">
+                            <input type="button" value="Anterior" id="idPagAnterior" style="width:70px;"/>
+                            <input type="text" id="idPaginaDestino" style="width:70px;text-align:center;">
+                            <input type="button" value="Próxima" id="idPagProxima" style="width:70px;"/>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="center" colspan="3">
+                            <input type="button" value="BUSCAR" id="idBuscar"/>
+                            <input type="button" value="LIMPAR" id="idLimparBusca"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--==========================================================================-->
+            <div id="idDivCatalogacao">
+                <table align="center" border="0">
+                    <tr>
+                        <td width="190" align="left" style="color:red;font-weight:bold;">
+                            <a href="#" style="text-decoration:none;color:red;" onclick="mostrarDiv(2);">BUSCA</a>
+                        </td>
+                        <td width="540" align="center" style="font-weight:bold;font-size:14pt;">
+                            CATALOGAÇÃO
+                        </td>
+                        <td width="160" align="right" style="color:red;font-weight:bold;">
+                            <a href="#" style="text-decoration:none;color:red;" onclick="mostrarDiv(1);">SAIR</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="idMsgDialogo3" colspan="3">
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <input type="button" value="Anterior" id="idItemAnterior" style="width:70px;"/>&nbsp;&nbsp;#Patrimônio
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text" id="idpatrimonio3" readonly/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Título
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text" id="idtitulo3" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Autoria
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text" id="idautoria3" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Veículo
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text" id="idveiculo3" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Data da publicação
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text" id="iddatapublicacao3" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            Palavras-chave
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="text" id="idpalchave3" readonly/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <input type="button" value="SUBIR ARQUIVO"/>
+                        </td>
+                        <td align="left" colspan="2">
+                            <input type="file" id="idInputTypeFile"/>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="right">
+                            Novo comentário
+                        </td>
+                        <td align="left" colspan="2">
+                            <textarea id="idNovoComentario" rows="6" cols="100"></textarea>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="right">
+                            Comentários já feitos
+                        </td>
+                        <td align="left" colspan="2">
+                            <div id="idComentarios">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="center" colspan="3">
+                            <input type="button" id="idEditar" value="EDITAR"/>
+                            <input type="button" value="SALVAR NOVO"/>
+                            <input type="button" value="SALVAR ATUAL"/>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="center" colspan="3">
+                            <input type="button" id="idAbrirArquivo" value="ABRIR ARQUIVO"/>
+                            <input type="button" id="idLimparCat" value="LIMPAR"/>
+                            <input type="button" id="idExcluir" value="EXCLUIR"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--==========================================================================-->
+        </div>
+    </body>
+</html>
