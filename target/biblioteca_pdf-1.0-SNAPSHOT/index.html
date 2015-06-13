@@ -10,7 +10,7 @@
         <script type="text/javascript" src="js/js_index.js"></script>
     </head>
 
-    <body id="idBody" >
+    <body id="idBody" onload="iniciar();">
         <div id="idDivMaisExterna">
             <h2>Biblio PDF  <font style="font-size:13pt;color:blue;font-weight:normal;">v0.1 Beta&nbsp; &copy;J.L.S.Leão, 2015 - jorge.leao@ufrj.br</font></h2>
 
@@ -135,8 +135,8 @@
                     </tr>
                     <tr valign="top">
                         <td align="center" colspan="3">
-                            <input type="button" value="BUSCAR" id="idBuscar"/>
-                            <input type="button" value="LIMPAR" id="idLimparBusca"/>
+                            <input type="button" value="BUSCAR" id="idBuscar" onclick="enviarBusca();"/>
+                            <input type="button" value="LIMPAR" id="idLimparBusca" onclick="limparbusca();"/>
                         </td>
                     </tr>
                 </table>
@@ -236,15 +236,15 @@
                     </tr>
                     <tr valign="top">
                         <td align="center" colspan="3">
-                            <input type="button" id="idEditar" value="EDITAR"/>
+                            <input type="button" id="idEditar" value="EDITAR" onclick="edit();"/>
                             <input type="button" value="SALVAR NOVO"/>
-                            <input type="button" value="SALVAR ATUAL"/>
+                            <input type="button" value="SALVAR ATUAL" onclick="salvarAtual();"/>
                         </td>
                     </tr>
                     <tr valign="top">
                         <td align="center" colspan="3">
                             <input type="button" id="idAbrirArquivo" value="ABRIR ARQUIVO"/>
-                            <input type="button" id="idLimparCat" value="LIMPAR"/>
+                            <input type="button" id="idLimparCat" value="LIMPAR" onclick="limparCatalogo();"/>
                             <input type="button" id="idExcluir" value="EXCLUIR"/>
                         </td>
                     </tr>

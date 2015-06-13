@@ -1,17 +1,30 @@
 package ufrj.pedroeusebio.biblioteca_pdf;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class BibliotecaDAO extends BaseDAO {
+public class BibliotecaDAO extends base2 {
 // Implementing all getters ------------------------------------------------------------------------------------------------------------------------------------------------------
-    boolean getBypatrimonio(RespostaDTO dto) {
+
+    public boolean getBypatrimonio(String patrimonio) {
         try {
-            Connection con = getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM "+" WHERE patrimonio=?;");
-            pstmt.setString(1, dto.getPatrimonio());
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+
+            Class.forName("org.postgresql.Driver");
+
+            Connection con;
+
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM dadoscatalogo WHERE patrimonio=" + patrimonio + ";");
             ResultSet rst = pstmt.executeQuery();
+            while (rst.next()) {
+
+            }
+            con.close();
+            //System.out.println(rst.getString("titulo"));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -20,11 +33,37 @@ public class BibliotecaDAO extends BaseDAO {
         return true;
     }
 
-    boolean getBytitulo(RespostaDTO dto) {
+    public boolean getBytitulo(String titulo) {
         try {
-            Connection con = getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM "+" WHERE titulo=?;");
-            pstmt.setString(1, dto.getTitulo());
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+
+            Connection con;
+
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM dadoscatalogo WHERE titulo=" + titulo + ";");
+            ResultSet rst = pstmt.executeQuery();
+            rst.next();
+            System.out.println(rst.getString("patrimonio"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean getByautoria(String autoria) {
+        try {
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+
+            Connection con;
+
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM dadoscatalogo WHERE autoria=" + autoria + ";");
+            //pstmt.setString(1, dto.getAutoria());
             ResultSet rst = pstmt.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,12 +72,19 @@ public class BibliotecaDAO extends BaseDAO {
         return true;
     }
 
-    boolean getByautoria(RespostaDTO dto) {
+    public boolean getByveiculo(String veiculo) {
         try {
-            Connection con = getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM "+" WHERE autoria=?;");
-            pstmt.setString(1, dto.getAutoria());
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+
+            Connection con;
+
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM dadoscatalogos WHERE veiculo=" + veiculo + ";");
             ResultSet rst = pstmt.executeQuery();
+            rst.next();
+            System.out.println(rst.getString("veiculo"));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -46,12 +92,19 @@ public class BibliotecaDAO extends BaseDAO {
         return true;
     }
 
-    boolean getByveiculo(RespostaDTO dto) {
+    public boolean getBydata(String data) {
         try {
-            Connection con = getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM "+" WHERE veiculo=?;");
-            pstmt.setString(1, dto.getVeiculo());
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+
+            Connection con;
+
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM dadoscatalogo WHERE data=" + data + ";");
             ResultSet rst = pstmt.executeQuery();
+            rst.next();
+            System.out.println(rst.getString("titulo"));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -59,31 +112,24 @@ public class BibliotecaDAO extends BaseDAO {
         return true;
     }
 
-    boolean getBydata(RespostaDTO dto) {
+    public boolean getBypalchave(String palchave) {
         try {
-            Connection con = getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM "+" WHERE data=?;");
-            pstmt.setString(1, dto.getData());
-            ResultSet rst = pstmt.executeQuery();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
 
-    boolean getBypalchave(RespostaDTO dto) {
-        try {
-            Connection con = getConnection();
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM "+" WHERE palchave=?;");
-            pstmt.setString(1, dto.getPalchave());
+            Connection con;
+
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM dadoscatalogo WHERE palchave=" + palchave + ";");
             ResultSet rst = pstmt.executeQuery();
+            rst.next();
+            System.out.println(rst.getString("palchave"));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
-        
-    //Implementing all write at the database -------------------------------------------------------------------------------------------------------------------------------------
     }
+     //Implementing all write at the database -------------------------------------------------------------------------------------------------------------------------------------
 }

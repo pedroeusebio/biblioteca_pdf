@@ -6,10 +6,15 @@
 package ufrj.pedroeusebio.biblioteca_pdf;
 
 import java.io.BufferedReader;
+import static java.io.FileDescriptor.out;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+import javax.json.*;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -17,41 +22,67 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 
+public class Controller extends HttpServlet {
 
-public class Controller extends HttpServlet{
-    
+    //private BibliotecaDAO database;
+    //private base2 database2;
+    private ArrayList<JSONArray> answer;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Não é um par nome-valor, então tem que ler como se fosse um upload de arquivo...
-        BufferedReader br = new BufferedReader(new  InputStreamReader(request.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String json = "";
-        if(br != null){
+        if (br != null) {
             json = br.readLine();
         }
-        
-        //Converte o string em "objeto json" java
-        // Create JsonReader from Json.
         JsonReader reader = Json.createReader(new StringReader(json));
-        // Get the JsonObject structure from JsonReader.
-        JsonObject jsonObject = reader.readObject();
-        // We are done with the reader, let's close it.
+        JsonObject JSONObject = reader.readObject();
         reader.close();
-        
-        // Agora é só responder...
+
+        JsonObject innerObj;
         RespostaDTO dto = new RespostaDTO();
-        dto.setPatrimonio("Servidor recebeu:" + jsonObject.getString("campo1"));
-        dto.setTitulo("Servidor recebeu:" + jsonObject.getString("campo2"));
-        //dto.setCampo3("Servidor recebeu:" + jsonObject.getString("campo3"));
-        //dto.setCampo4("Servidor recebeu:" + jsonObject.getString("campo4"));
-        //System.out.println(dto.campo3);
-        //System.out.println(dto.campo4);
+        BibliotecaDAO Biblioteca = null;
+        try {
+            System.out.println(JSONObject.getJsonObject("autoria").getString("texto").isEmpty());
+            if (JSONObject.getString("patrimonio") != null && !JSONObject.getString("patrimonio").isEmpty()) {
+                System.out.println("entrei");
+                Biblioteca.getBypatrimonio(JSONObject.getString("patrimonio"));
+            } else {
+                if (JSONObject.getJsonObject("autoria").getString("texto") != null && !JSONObject.getJsonObject("autoria").getString("texto").isEmpty()) {
+                    System.out.println("entrei");
+                    innerObj = JSONObject.getJsonObject("autoria");
+                    Biblioteca.getByautoria(innerObj.getString("texto"));
+                }
+                if (JSONObject.getJsonObject("titulo") != null) {
+                    System.out.println("entrei");
+                    innerObj = JSONObject.getJsonObject("titulo");
+                    Biblioteca.getBytitulo(innerObj.getString("texto"));
+                }
+                if (JSONObject.getJsonObject("data") != null) {
+                    System.out.println("entrei");
+                    innerObj = JSONObject.getJsonObject("data");
+                    Biblioteca.getBydata(innerObj.getString("texto"));
+                }
+                if (JSONObject.getJsonObject("palchave") != null) {
+                    System.out.println("entrei");
+                    innerObj = JSONObject.getJsonObject("palchave");
+                    Biblioteca.getBydata(innerObj.getString("texto"));
+                }
+            }
+            innerObj = JSONObject.getJsonObject("autoria");
+            dto.setAutoria(innerObj.getString("texto"));
+
+        } catch (Exception e) {
+
+        }
+
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.print(dto.toString());
         out.flush();
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

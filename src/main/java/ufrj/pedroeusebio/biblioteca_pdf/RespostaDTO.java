@@ -6,14 +6,14 @@ import javax.json.Json;
 import javax.json.JsonObject;
 
 public class RespostaDTO implements Serializable{
-    private String patrimonio;
-    private String titulo;
-    private String autoria;
-    private String veiculo;
-    private String data;
-    private String palchave;
-    private String comentario;
-    private String path;
+    private String patrimonio = " ";
+    private String titulo = " ";
+    private String autoria = " ";
+    private String veiculo = " ";
+    private String data = " ";
+    private String palchave = " ";
+    private String comentario = " ";
+    private String path = " ";
 
     public String getPath() {
         return path;
@@ -92,14 +92,14 @@ public class RespostaDTO implements Serializable{
     public JsonObject toJSON(){
 
         objetoJSON = Json.createObjectBuilder()
-                .add("campo1", patrimonio)
-                .add("campo2", titulo)
-                .add("campo3", autoria)
-                .add("campo4", veiculo)
-                .add("campo5", data)
-                .add("campo6", palchave)
-                .add("campo7", comentario)
-                .add("campo8", path)
+                .add("patrimonio", patrimonio)
+                .add("titulo", titulo)
+                .add("autoria", autoria)
+                .add("veiculo", veiculo)
+                .add("data", data)
+                .add("palchave", palchave)
+                .add("comentario", comentario)
+                .add("path", path)
                 .build();
         
         return objetoJSON;

@@ -114,8 +114,9 @@ function modeloBusca() {
     var busca = {};
     if (document.getElementById('idcheckpatrimonio').checked === true) {
         busca.patrimonio = {};
-        busca.patrimonio.texto = document.getElementById('idpatrimonio2').value;
-    } else {
+        busca.patrimonio = document.getElementById('idpatrimonio2').value;
+    }
+    else {
         if (document.getElementById('idchecktituloOU').checked === true) {
             busca.titulo = {};
             busca.titulo.texto = document.getElementById('idtitulo2').value;
@@ -171,7 +172,10 @@ function modeloBusca() {
 }
 //modelo temporario para testes-------------------------------------------------------------------------------------------------------------
 function enviarBusca() {
-    document.getElementById('idTabelaResultados').innerHTML = JSON.stringify(modeloBusca());
+    //fazerPedidoAJAX(modeloBusca(),"GET");
+    fazerPedidoAJAX();
+    //document.getElementById('idTabelaResultados').textContent = JSON.stringify(modeloBusca());
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
 var editable;
@@ -256,4 +260,36 @@ function modeloCatalogo() {
 
 function salvarAtual() {
     document.getElementById('idComentarios').textContent = JSON.stringify(modeloCatalogo());
+}
+
+function fazerPedidoAJAX() {
+    //-------------------------
+    // Preparacao do pedido
+    console.log("=== sendData: " + modeloBusca());
+    var data = JSON.stringify(modeloBusca());
+    console.log("=== data: " + data);
+    var ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.open("POST", "controller");
+    ajaxRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    //-------------------------
+    // Prepara recebimento da resposta
+    ajaxRequest.onreadystatechange =
+            function () {
+                if (ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
+                    console.log("resposta ajax : " + ajaxRequest.responseText);
+                    var respostaJSON = JSON.parse(ajaxRequest.responseText);
+
+                    //for(var i = 0; i< respostaJSON.length; i++){
+                    document.getElementById('idTabelaResultados').textContent = JSON.stringify(respostaJSON);
+                    // }
+
+
+                }
+            };
+    //-------------------------
+    // Envio do pedido
+    ajaxRequest.send(data);
+    //-------------------------
+    //document.getElementById('idTabelaResultados').textContent = "terminei pedido1";
 }

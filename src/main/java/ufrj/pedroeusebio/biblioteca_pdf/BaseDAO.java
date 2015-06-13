@@ -17,7 +17,8 @@ public class BaseDAO {
             if (cxt == null) {
                 System.out.println("[BaseDAO.constructor] Falha no InitialContext.");
             }else{
-                ds = (DataSource) cxt.lookup("java:comp/env/jdbc/nomeDeFantasia");
+                ds = (DataSource) cxt.lookup("java:comp/env/jdbc/biblio_db");
+                System.out.println("conexao realizada");
             }
         } catch (Exception e) {
             System.out.println("[BaseDAO.constructor] Excessão: " + e.getMessage());
