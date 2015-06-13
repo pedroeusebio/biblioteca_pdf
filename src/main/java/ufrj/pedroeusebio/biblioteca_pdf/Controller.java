@@ -31,7 +31,6 @@ public class Controller extends HttpServlet {
 
     //private ArrayList<JSONArray> answer;
     //private BibliotecaDAO Biblioteca;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -42,29 +41,78 @@ public class Controller extends HttpServlet {
         JsonReader reader = Json.createReader(new StringReader(json));
         JsonObject JSONObject = reader.readObject();
         reader.close();
-        
+        System.out.println(JSONObject);
         JsonObject innerObj;
         RespostaDTO dto = new RespostaDTO();
         BibliotecaDAO Biblioteca = new BibliotecaDAO();
         ArrayList<JSONArray> answer = new ArrayList<JSONArray>();
+        ArrayList<JSONArray> answeraux = new ArrayList<JSONArray>();
+        String[] ModeArray = new String[4];
+
         try {
-            if (JSONObject.getString("patrimonio") != null && !JSONObject.getString("patrimonio").isEmpty()) {
+            if (!JSONObject.getString("patrimonio").isEmpty()) {
                 System.out.println("entrei1");
                 dto.setPatrimonio(JSONObject.getString("patrimonio"));
-                answer.add(Biblioteca.getBypatrimonio(dto.getPatrimonio()));
-            } //else if (JSONObject.getJsonObject("titulo").getString("texto") != null && !JSONObject.getJsonObject("titulo").getString("texto").isEmpty()){
-//                    System.out.println("entrei");
-//                    dto.setTitulo(JSONObject.getJsonObject("titulo").getString("texto"));
-//                    answer.add(Biblioteca.getBytitulo(dto.getTitulo()));
-//                }
-            innerObj = JSONObject.getJsonObject("titulo");
-            dto.setTitulo(innerObj.getString("texto"));
-            //dto.setTitulo(JSONObject.getJsonObject("titulo").getString("texto"));
-            System.out.println(dto.getTitulo());
+                answer.addAll(Biblioteca.getBypatrimonio(dto.getPatrimonio()));
+            }
         } catch (Exception e) {
-
+            //e.printStackTrace();
         }
-
+        try {
+            if (!JSONObject.getJsonObject("titulo").isEmpty()) {
+                System.out.println("entrei 2");
+                innerObj = JSONObject.getJsonObject("titulo");
+                dto.setTitulo(innerObj.getString("texto"));
+                ModeArray[0] = innerObj.getString("mode");
+                System.out.println(ModeArray[0]);
+                if (ModeArray[0].equalsIgnoreCase("OU")) {
+                    System.out.println("entrei3");
+                    System.out.println(dto.getTitulo());
+                    answer.addAll(Biblioteca.getBytitulo(dto.getTitulo()));
+                } else {
+                    answeraux = Biblioteca.getBytitulo(dto.getTitulo());
+                    if(answer.size()!= 0){
+                    for (int i = 0; i < answeraux.size(); i++) {
+                        if (!answer.contains(answeraux.get(i))) {
+                            answer.remove(answeraux.get(i));
+                        }
+                    }
+                    }else {answer.addAll(Biblioteca.getBytitulo(dto.getTitulo()));}
+                }
+            }
+            //if(!JSONObject.getJsonObject("").isEmpty())
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        try {
+            if (!JSONObject.getJsonObject("autoria").isEmpty()) {
+                System.out.println("entrei autoria");
+                innerObj = JSONObject.getJsonObject("autoria");
+                dto.setAutoria(innerObj.getString("texto"));
+                ModeArray[0] = innerObj.getString("mode");
+                if (ModeArray[0].equalsIgnoreCase("OU")) {;
+                    System.out.println(dto.getAutoria());
+                    answer.addAll(Biblioteca.getByautoria(dto.getAutoria()));
+                } else {
+                    answeraux = Biblioteca.getByautoria(dto.getAutoria());
+                    if(answer.size()!= 0){
+                        System.out.println("nao ta vazia !");
+                    for (int i = 0; i < answeraux.size(); i++) {
+                        if (!answer.contains(answeraux.get(i))) {
+                            System.out.println("removerei!");
+                            answer.remove(answeraux.get(i));
+                            System.out.println("removi!");
+                        }
+                    }
+                    }else {answer.addAll(Biblioteca.getByautoria(dto.getAutoria()));}
+                }
+            }
+            //if(!JSONObject.getJsonObject("").isEmpty())
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        System.out.println(answer);
+            //dto.setTitulo(JSONObject.getJsonObject("titulo").getString("texto"));
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.print(answer);

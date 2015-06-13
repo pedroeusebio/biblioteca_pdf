@@ -169,9 +169,8 @@ function modeloBusca() {
 }
 //modelo temporario para testes-------------------------------------------------------------------------------------------------------------
 function enviarBusca() {
-    //fazerPedidoAJAX(modeloBusca(),"GET");
+    document.getElementById("idTabelaResultados").textContent = "";
     fazerPedidoAJAX();
-    //document.getElementById('idTabelaResultados').textContent = JSON.stringify(modeloBusca());
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------
