@@ -108,62 +108,59 @@ function limparbusca() {
     document.getElementById('idpalchave2').value = " ";
     document.getElementById('idcheckpalchaveOU').checked = false;
     document.getElementById('idcheckpalchaveE').checked = false;
+    document.getElementById("idTabelaResultados").textContent = "";
 }
 
 function modeloBusca() {
     var busca = {};
+    busca.patrimonio = {};
+    busca.titulo = {};
+    busca.autoria = {};
+    busca.veiculo = {};
+    busca.datapublicacao = {};
+    busca.palchave = {};
     if (document.getElementById('idcheckpatrimonio').checked === true) {
-        busca.patrimonio = {};
         busca.patrimonio = document.getElementById('idpatrimonio2').value;
     }
     else {
         if (document.getElementById('idchecktituloOU').checked === true) {
-            busca.titulo = {};
             busca.titulo.texto = document.getElementById('idtitulo2').value;
             busca.titulo.mode = "OU";
         }
         else if (document.getElementById('idchecktituloE').checked === true) {
-            busca.titulo = {};
             busca.titulo.texto = document.getElementById('idtitulo2').value;
             busca.titulo.mode = "E";
         }
         if (document.getElementById('idcheckautoriaOU').checked === true) {
-            busca.autoria = {};
             busca.autoria.texto = document.getElementById('idautoria2').value;
             busca.autoria.mode = "OU";
         }
         else if (document.getElementById('idcheckautoriaE').checked === true) {
-            busca.autoria = {};
             busca.autoria.texto = document.getElementById('idautoria2').value;
             busca.autoria.mode = "E";
         }
         if (document.getElementById('idcheckveiculoOU').checked === true) {
-            busca.veiculo = {};
             busca.veiculo.texto = document.getElementById('idveiculo2').value;
             busca.veiculo.mode = "OU";
         }
         else if (document.getElementById('idcheckveiculoE').checked === true) {
-            busca.veiculo = {};
             busca.veiculo.texto = document.getElementById('idveiculo2').value;
             busca.veiculo.mode = "E";
         }
         if (document.getElementById('idcheckdatapublicacaoOU').checked === true) {
-            busca.datapublicacao = {};
+
             busca.datapublicacao.texto = document.getElementById('iddatapublicacao2').value;
             busca.datapublicacao.mode = "OU";
         }
         else if (document.getElementById('idcheckdatapublicacaoE').checked === true) {
-            busca.datapublicacao = {};
             busca.datapublicacao.texto = document.getElementById('iddatapublicacao2').value;
             busca.datapublicacao.mode = "E";
         }
         if (document.getElementById('idcheckpalchaveOU').checked === true) {
-            busca.palchave = {};
             busca.palchave.texto = document.getElementById('idpalchave2').value;
             busca.palchave.mode = "";
         }
         else if (document.getElementById('idcheckpalchaveE').checked === true) {
-            busca.palchave = {};
             busca.palchave.texto = document.getElementById('idpalchave2').value;
             busca.palchave.mode = "";
         }
@@ -279,11 +276,15 @@ function fazerPedidoAJAX() {
                 if (ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
                     console.log("resposta ajax : " + ajaxRequest.responseText);
                     var respostaJSON = JSON.parse(ajaxRequest.responseText);
-
-                    //for(var i = 0; i< respostaJSON.length; i++){
-                    document.getElementById('idTabelaResultados').textContent = JSON.stringify(respostaJSON);
-                    // }
-
+                    console.log(respostaJSON);
+                    if (respostaJSON[0] == null) {
+                        document.getElementById("idMsgDialogo2").textContent = "Catalogo não encontrado !";
+                        document.getElementById("idTabelaResultados").textContent = "";
+                    } else {
+                        for (var i = 0; i < respostaJSON.length; i++) {
+                            document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='files/" + respostaJSON[i][0].arquivo + "'>" + respostaJSON[i][1].titulo + "</a><br>");
+                        }
+                    }
 
                 }
             };

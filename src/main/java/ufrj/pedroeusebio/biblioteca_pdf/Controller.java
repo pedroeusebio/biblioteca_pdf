@@ -13,6 +13,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.json.*;
 import javax.json.Json;
@@ -23,12 +25,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Controller extends HttpServlet {
 
-    //private BibliotecaDAO database;
-    //private base2 database2;
-    private ArrayList<JSONArray> answer;
+    //private ArrayList<JSONArray> answer;
+    //private BibliotecaDAO Biblioteca;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,47 +42,32 @@ public class Controller extends HttpServlet {
         JsonReader reader = Json.createReader(new StringReader(json));
         JsonObject JSONObject = reader.readObject();
         reader.close();
-
+        
         JsonObject innerObj;
         RespostaDTO dto = new RespostaDTO();
-        BibliotecaDAO Biblioteca = null;
+        BibliotecaDAO Biblioteca = new BibliotecaDAO();
+        ArrayList<JSONArray> answer = new ArrayList<JSONArray>();
         try {
-            System.out.println(JSONObject.getJsonObject("autoria").getString("texto").isEmpty());
             if (JSONObject.getString("patrimonio") != null && !JSONObject.getString("patrimonio").isEmpty()) {
-                System.out.println("entrei");
-                Biblioteca.getBypatrimonio(JSONObject.getString("patrimonio"));
-            } else {
-                if (JSONObject.getJsonObject("autoria").getString("texto") != null && !JSONObject.getJsonObject("autoria").getString("texto").isEmpty()) {
-                    System.out.println("entrei");
-                    innerObj = JSONObject.getJsonObject("autoria");
-                    Biblioteca.getByautoria(innerObj.getString("texto"));
-                }
-                if (JSONObject.getJsonObject("titulo") != null) {
-                    System.out.println("entrei");
-                    innerObj = JSONObject.getJsonObject("titulo");
-                    Biblioteca.getBytitulo(innerObj.getString("texto"));
-                }
-                if (JSONObject.getJsonObject("data") != null) {
-                    System.out.println("entrei");
-                    innerObj = JSONObject.getJsonObject("data");
-                    Biblioteca.getBydata(innerObj.getString("texto"));
-                }
-                if (JSONObject.getJsonObject("palchave") != null) {
-                    System.out.println("entrei");
-                    innerObj = JSONObject.getJsonObject("palchave");
-                    Biblioteca.getBydata(innerObj.getString("texto"));
-                }
-            }
-            innerObj = JSONObject.getJsonObject("autoria");
-            dto.setAutoria(innerObj.getString("texto"));
-
+                System.out.println("entrei1");
+                dto.setPatrimonio(JSONObject.getString("patrimonio"));
+                answer.add(Biblioteca.getBypatrimonio(dto.getPatrimonio()));
+            } //else if (JSONObject.getJsonObject("titulo").getString("texto") != null && !JSONObject.getJsonObject("titulo").getString("texto").isEmpty()){
+//                    System.out.println("entrei");
+//                    dto.setTitulo(JSONObject.getJsonObject("titulo").getString("texto"));
+//                    answer.add(Biblioteca.getBytitulo(dto.getTitulo()));
+//                }
+            innerObj = JSONObject.getJsonObject("titulo");
+            dto.setTitulo(innerObj.getString("texto"));
+            //dto.setTitulo(JSONObject.getJsonObject("titulo").getString("texto"));
+            System.out.println(dto.getTitulo());
         } catch (Exception e) {
 
         }
 
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.print(dto.toString());
+        out.print(answer);
         out.flush();
 
     }
