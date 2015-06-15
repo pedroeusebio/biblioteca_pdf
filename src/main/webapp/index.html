@@ -162,10 +162,10 @@
                     </tr>
                     <tr>
                         <td align="right">
-                            <input type="button" value="Anterior" id="idItemAnterior" style="width:70px;"/>&nbsp;&nbsp;#Patrimônio
+                            <input type="button" value="Anterior" id="idItemAnterior" style="width:70px;" onclick="anterior();"/>&nbsp;&nbsp;#Patrimônio
                         </td>
                         <td align="left" colspan="2">
-                            <input type="text" id="idpatrimonio3" readonly/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;"/>
+                            <input type="text" id="idpatrimonio3" readonly/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;" onclick="proximo();"/>
                         </td>
                     </tr>
                     <tr>
@@ -237,15 +237,17 @@
                     <tr valign="top">
                         <td align="center" colspan="3">
                             <input type="button" id="idEditar" value="EDITAR" onclick="edit();"/>
-                            <input type="button" value="SALVAR NOVO"/>
-                            <input type="button" value="SALVAR ATUAL" onclick="salvarAtual();"/>
+                            <input type="button" id="idSalvarNovo" value="SALVAR NOVO" onclick="salvarNovo();"/>
+                            <input type="button" id="idSalvarAtual" value="SALVAR ATUAL" onclick="salvarAtual();"/>
+                            <input type="button" id="idCancelar" value="CANCELAR" onclick="cancelar();" disabled="true"/>
+                            
                         </td>
                     </tr>
                     <tr valign="top">
                         <td align="center" colspan="3">
-                            <input type="button" id="idAbrirArquivo" value="ABRIR ARQUIVO"/>
+                            <input type="button" id="idAbrirArquivo" value="ABRIR ARQUIVO" onclick=""/>
                             <input type="button" id="idLimparCat" value="LIMPAR" onclick="limparCatalogo();"/>
-                            <input type="button" id="idExcluir" value="EXCLUIR"/>
+                            <input type="button" id="idExcluir" value="EXCLUIR" onclick="excluir();"/>
                         </td>
                     </tr>
                 </table>

@@ -12,6 +12,14 @@
         <servlet-name>Controller</servlet-name>
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ControllerCatalogo</servlet-name>
+        <servlet-class>ufrj.pedroeusebio.biblioteca_pdf.ControllerCatalogo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ControllerCatalogo</servlet-name>
+        <url-pattern>/ControllerCatalogo</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             60
