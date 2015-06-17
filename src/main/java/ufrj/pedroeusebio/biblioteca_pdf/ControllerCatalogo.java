@@ -37,24 +37,49 @@ public class ControllerCatalogo extends HttpServlet {
         boolean send = false;
         BibliotecaDAO biblioteca = new BibliotecaDAO();
         System.out.println(JSONObject);
-        dto.setPatrimonio(JSONObject.getString("patrimonio"));
-        dto.setAutoria(JSONObject.getString("autoria"));
-        dto.setTitulo(JSONObject.getString("titulo"));
-        dto.setVeiculo(JSONObject.getString("veiculo"));
-        dto.setData(JSONObject.getString("datapublicacao"));
-        dto.setPalchave(JSONObject.getString("palchave"));
-        dto.setComentario(JSONObject.getString("novocomentario"));
-        if(JSONObject.getString("mode").equalsIgnoreCase("atualizar")){
-            try{
-                biblioteca.updateDatebase(dto);
-                biblioteca.updateDbPalchave(dto);
-                biblioteca.updateDbComentario(dto);
-            }catch(Exception e){
-                
+        try {
+            if (!JSONObject.getString("patrimonio").isEmpty()) {
+                dto.setPatrimonio(JSONObject.getString("patrimonio"));
             }
+            if (!JSONObject.getString("autoria").isEmpty()) {
+                dto.setAutoria(JSONObject.getString("autoria"));
+            }
+            if (!JSONObject.getString("titulo").isEmpty()) {
+                dto.setTitulo(JSONObject.getString("titulo"));
+            }
+            if (!JSONObject.getString("veiculo").isEmpty()) {
+                dto.setVeiculo(JSONObject.getString("veiculo"));
+            }
+            if (!JSONObject.getString("datapublicacao").isEmpty()) {
+                dto.setData(JSONObject.getString("datapublicacao"));
+            }
+            if (!JSONObject.getString("palchave").isEmpty()) {
+                dto.setPalchave(JSONObject.getString("palchave"));
+            }
+            if (!JSONObject.getString("novocomentario").isEmpty()) {
+                String[] parts = JSONObject.getString("novocomentario").split("\n");
+                String comentario = "<span style=\"color:blue;\">" + parts[0] + "</span><br>" + parts[1] + "<br><hr>";
+                dto.setComentario(comentario);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if(JSONObject.getString("mode").equalsIgnoreCase("excluir")){
+        if (JSONObject.getString("mode").equalsIgnoreCase("atualizar")) {
+            try {
+                biblioteca.updateDatebase(dto);
+                if (!dto.getPalchave().isEmpty()) {
+                    biblioteca.updateDbPalchave(dto);
+                }
+                if (!dto.getComentario().isEmpty()) {
+                    biblioteca.updateDbComentario(dto);
+                }
+            } catch (Exception e) {
+
+            }
+        } else if (JSONObject.getString("mode").equalsIgnoreCase("excluir")) {
             biblioteca.deleteData(dto);
+        } else if (JSONObject.getString("mode").equalsIgnoreCase("novo")) {
+            biblioteca.addNewCatalogo(dto);
         }
 
         response.setContentType("application/json;charset=UTF-8");

@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -281,6 +283,7 @@ public class BibliotecaDAO {
                     + "' where patrimonio='" + dto.getPatrimonio() + "';";
             PreparedStatement pstmt = con.prepareStatement(query);
             ResultSet rst = pstmt.executeQuery();
+            con.close();
             return true;
         } catch (Exception e) {
             return false;
@@ -289,48 +292,98 @@ public class BibliotecaDAO {
     }
 
     public void updateDbPalchave(RespostaDTO dto) {
-
-        String[] parts = dto.getPalchave().replaceAll("\\s", "").split(";");
-        for (int i = 0; i < parts.length; i++) {
-            try {
-                DbInfo database = new DbInfo();
-                database.DadoBanco();
-                Class.forName("org.postgresql.Driver");
-                Connection con;
-                con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
-                String query = "SELECT * FROM public.palavras_chave WHERE palchave='" + parts[i] + "' and patrimonio='"+dto.getPatrimonio()+"' ;";
-                PreparedStatement pstmt = con.prepareStatement(query);
-                ResultSet rst = pstmt.executeQuery();
-                if (!rst.next()) {
-                    query = "INSERT INTO palavras_chave (palchave, patrimonio) VALUES ('" + parts[i] + "'," + dto.getPatrimonio() + ");";
-                    pstmt = con.prepareStatement(query);
-                    ResultSet auxrst = pstmt.executeQuery();
-                }
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    public void updateDbComentario(RespostaDTO dto) {
-        //"<span style=""color:blue;"">Leao</span><br>Este é bom porque a teoria é prática.<br><hr>"
-        String[] parts = dto.getComentario().split("\n");
-        String comentario = "<span style=\"color:blue;\">" + parts[0] + "</span><br>" + parts[1] + "<br><hr>";
+        ArrayList<String> parts = new ArrayList<String>();
+        ArrayList<String> partssaved = new ArrayList<String>();
+        String[] list = dto.getPalchave().replaceAll("\\s", "").split(";");
+        List<String> newList = Arrays.asList(list);
+        parts.addAll(newList);
+        String palsaved = "";
+        String query = "SELECT * FROM public.palavras_chave WHERE patrimonio='" + dto.getPatrimonio() + "' ;";
         try {
             DbInfo database = new DbInfo();
             database.DadoBanco();
             Class.forName("org.postgresql.Driver");
             Connection con;
             con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
-            String query = "INSERT INTO public.comentarios(comentario,patrimonio) VALUES ('" + comentario + "'," + dto.getPatrimonio() + ");";
             PreparedStatement pstmt = con.prepareStatement(query);
             ResultSet rst = pstmt.executeQuery();
+            while (rst.next()) {
+                palsaved += rst.getString("palchave") + ";";
+            }
+            String[] Arraypal = palsaved.replaceAll("\\s", "").split(";");
+            newList = Arrays.asList(Arraypal);
+            partssaved.addAll(newList);
+            for (int i = 0; i < partssaved.size(); i++) {
+                if (!parts.contains(partssaved.get(i))) {
+                    query = "DELETE FROM public.palavras_chave WHERE patrimonio =" + dto.getPatrimonio() + "and palchave='" + partssaved.get(i) + "' ;";
+                    pstmt = con.prepareStatement(query);
+                    rst = pstmt.executeQuery();
+                }
+            }
+            for (int i = 0; i < parts.size(); i++) {
+                if (!partssaved.contains(parts.get(i))) {
+                    query = "INSERT INTO palavras_chave (palchave, patrimonio) VALUES ('" + parts.get(i) + "'," + dto.getPatrimonio() + ");";
+                    pstmt = con.prepareStatement(query);
+                    rst = pstmt.executeQuery();
+                }
+            }
+            con.close();
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateDbComentario(RespostaDTO dto) {
+        //"<span style=""color:blue;"">Leao</span><br>Este é bom porque a teoria é prática.<br><hr>"
+        try {
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+            Connection con;
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            String query = "INSERT INTO public.comentarios(comentario,patrimonio) VALUES ('" + dto.getComentario() + "'," + dto.getPatrimonio() + ");";
+            PreparedStatement pstmt = con.prepareStatement(query);
+            ResultSet rst = pstmt.executeQuery();
+            con.close();
         } catch (Exception e) {
 
         }
     }
-    public void insertNewCatalogo(RespostaDTO dto){
-        
+
+    public void addNewCatalogo(RespostaDTO dto) {
+        int patrimonio = 0;
+        String query = "INSERT INTO public.dadoscatalogo (titulo, autoria, veiculo, data_publicacao)"
+                + " VALUES ('" + dto.getTitulo() + "','" + dto.getAutoria() + "','" + dto.getVeiculo() + "','" + dto.getData() + "');";
+        try {
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+            Connection con;
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement(query, new String[]{"patrimonio"});
+            pstmt.executeUpdate();
+            ResultSet rst = pstmt.getGeneratedKeys();
+            if (rst != null && rst.next()) {
+                patrimonio = (int) rst.getLong(1);
+            }
+            if (dto.getPalchave() != null) {
+                String[] parts = dto.getPalchave().replaceAll("\\s", "").split(";");
+                for (int i = 0; i < parts.length; i++) {
+                    query = "INSERT INTO public.palavras_chave (palchave,patrimonio) VALUES ('"
+                            + parts[i] + "','" + patrimonio + "');";
+                    PreparedStatement pstmtPalchave = con.prepareStatement(query);
+                    pstmtPalchave.executeUpdate();
+                }
+            }
+            if (dto.getComentario() != null) {
+                query = "INSERT INTO public.comentarios (comentario,patrimonio) VALUES ('"
+                        + dto.getComentario() + "','" + patrimonio + "');";
+                PreparedStatement pstmtComentario = con.prepareStatement(query);
+                pstmtComentario.executeUpdate();
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteData(RespostaDTO dto) {
@@ -351,6 +404,22 @@ public class BibliotecaDAO {
             } catch (Exception e) {
 
             }
+        }
+    }
+
+    public void saveFile(RespostaDTO dto) {
+        String query = "UPDATE public.dadoscatalogo SET arquivo='" + dto.getPath() + "' WHERE patrimonio='" + dto.getPatrimonio() + "' ;";
+        try {
+            DbInfo database = new DbInfo();
+            database.DadoBanco();
+            Class.forName("org.postgresql.Driver");
+            Connection con;
+            con = DriverManager.getConnection(database.getUrl(), database.getUsuario(), database.getSenha());
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

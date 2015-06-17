@@ -206,13 +206,13 @@ function edit() {
 
 function limparCatalogo() {
     if (editable === true) {
-        document.getElementById('idtitulo3').value = " ";
-        document.getElementById('idautoria3').value = " ";
-        document.getElementById('idveiculo3').value = " ";
-        document.getElementById('iddatapublicacao3').value = " ";
-        document.getElementById('idpalchave3').value = " ";
-        document.getElementById('idNovoComentario').textContent = " ";
-        document.getElementById('idComentarios').innerHTML = " ";
+        document.getElementById('idtitulo3').value = "";
+        document.getElementById('idautoria3').value = "";
+        document.getElementById('idveiculo3').value = "";
+        document.getElementById('iddatapublicacao3').value = "";
+        document.getElementById('idpalchave3').value = "";
+        document.getElementById('idNovoComentario').value = "";
+        document.getElementById('idComentarios').innerHTML = "";
     }
 }
 
@@ -220,45 +220,67 @@ function modeloCatalogo(mode) {
     var catalogo = {};
     catalogo.patrimonio = document.getElementById('idpatrimonio3').value;
     catalogo.mode = mode;
-    if (document.getElementById('idtitulo3').value === "" ||
+    catalogo.titulo = "";
+    catalogo.autoria = "";
+    catalogo.veiculo = "";
+    catalogo.datapublicacao = "";
+    catalogo.palchave = "";
+    catalogo.novocomentario = "";
+    if (document.getElementById('idtitulo3').value === "" &&
             document.getElementById('idtitulo3').value === " ") {
         document.getElementById('idMsgDialogo3').textContent = "O campo Titulo esta vazio";
         return null;
     } else {
         catalogo.titulo = document.getElementById('idtitulo3').value;
     }
-    if (document.getElementById('idautoria3').value === "" ||
+    if (document.getElementById('idautoria3').value === "" &&
             document.getElementById('idautoria3').value === " ") {
         document.getElementById('idMsgDialogo3').textContent = "O campo Autoria esta vazio";
         return null;
     } else {
         catalogo.autoria = document.getElementById('idautoria3').value;
     }
-    if (document.getElementById('idveiculo3').value === "" ||
+    if (document.getElementById('idveiculo3').value === "" &&
             document.getElementById('idveiculo3').value === " ") {
         document.getElementById('idMsgDialogo3').textContent = "O campo veiculo esta vazio";
         return null;
     } else {
         catalogo.veiculo = document.getElementById('idveiculo3').value;
     }
-    if (document.getElementById('iddatapublicacao3').value === "" ||
+    if (document.getElementById('iddatapublicacao3').value === "" &&
             document.getElementById('iddatapublicacao3').value === " ") {
         document.getElementById('idMsgDialogo3').textContent = "O campo Data da publicação esta vazio";
         return null;
     } else {
         catalogo.datapublicacao = document.getElementById('iddatapublicacao3').value;
     }
-    if (document.getElementById('idpalchave3').value === "" ||
+    if (document.getElementById('idpalchave3').value === "" &&
             document.getElementById('idpalchave3').value === " ") {
         document.getElementById('idMsgDialogo3').textContent = "O campo Palavras-chave esta vazio";
         return null;
     } else {
         catalogo.palchave = document.getElementById('idpalchave3').value;
     }
-    if (document.getElementById('idNovoComentario').value !== "" ||
+    if (document.getElementById('idNovoComentario').value !== "" &&
             document.getElementById('idNovoComentario').value !== " ") {
-        catalogo.novocomentario = document.getElementById('idNovoComentario').value;
+        if (document.getElementById('idAutorComentario').value === "" &&
+                document.getElementById('idAutorComentario').value === " ") {
+            document.getElementById('idMsgDialogo3').textContent = "Insira o seu nome como autor";
+            console.log(document.getElementById('idNovoComentario').value !== "");
+            return null;
+        } else {
+            catalogo.novocomentario = document.getElementById("idAutorComentario").value + "\n" + document.getElementById('idNovoComentario').value;
+        }
     }
+    if (document.getElementById('idAutorComentario').value !== "" && document.getElementById('idAutorComentario').value !== " ") {
+        if (document.getElementById('idNovoComentario').value === "" && document.getElementById('idNovoComentario').value === " ") {
+            document.getElementById('idMsgDialogo3').textContent = "Insira o comentario";
+            return null;
+        } else {
+            catalogo.novocomentario = document.getElementById("idAutorComentario").value + "\n" + document.getElementById('idNovoComentario').value;
+        }
+    }
+
     return catalogo;
 }
 
@@ -305,6 +327,7 @@ function carregarCatalogo(i) {
     console.log("que deveria aparecer " + position);
     console.log("catalogo atual é " + position);
     document.getElementById("idMsgDialogo3").textContent = "";
+    document.getElementById("idAutorComentario").value = "";
     document.getElementById("idNovoComentario").value = "";
     document.getElementById("idpatrimonio3").value = respostaJSON[i][0].patrimonio;
     document.getElementById('idtitulo3').value = respostaJSON[i][1].titulo;
@@ -312,7 +335,7 @@ function carregarCatalogo(i) {
     document.getElementById('idveiculo3').value = respostaJSON[i][3].veiculo;
     document.getElementById('iddatapublicacao3').value = respostaJSON[i][4].date;
     document.getElementById('idpalchave3').value = respostaJSON[i][6].palchave;
-    document.getElementById('idComentarios').innerHTML=respostaJSON[i][7].comentarios;
+    document.getElementById('idComentarios').innerHTML = respostaJSON[i][7].comentarios;
     document.getElementById('idAbrirArquivo').onclick = function () {
         openFile(i);
     };
@@ -392,36 +415,67 @@ function salvarNovo() {
         document.getElementById('idSalvarAtual').disabled = true;
         document.getElementById('idSalvarNovo').value = "ENVIAR";
         document.getElementById('idCancelar').disabled = false;
-        
+
     } else {
         sendCatalogo("novo");
     }
 }
 
-function cancelar(){
-        carregarCatalogo(position);
-        document.getElementById('idExcluir').disabled = false;
-        document.getElementById('idAbrirArquivo').disabled = false;
-        document.getElementById('idSalvarAtual').disabled = false;
-        document.getElementById('idSalvarNovo').disabled =false;
-        document.getElementById('idCancelar').disabled= true;
-        editable = false;
-        document.getElementById('idtitulo3').readOnly = true;
-        document.getElementById('idautoria3').readOnly = true;
-        document.getElementById('idveiculo3').readOnly = true;
-        document.getElementById('iddatapublicacao3').readOnly = true;
-        document.getElementById('idpalchave3').readOnly = true;
-        document.getElementById('idMsgDialogo3').textContent = "";
-     if(document.getElementById('idSalvarNovo').value =="ENVIAR" ){
+function cancelar() {
+    carregarCatalogo(position);
+    document.getElementById('idExcluir').disabled = false;
+    document.getElementById('idAbrirArquivo').disabled = false;
+    document.getElementById('idSalvarAtual').disabled = false;
+    document.getElementById('idSalvarNovo').disabled = false;
+    document.getElementById('idCancelar').disabled = true;
+    editable = false;
+    document.getElementById('idtitulo3').readOnly = true;
+    document.getElementById('idautoria3').readOnly = true;
+    document.getElementById('idveiculo3').readOnly = true;
+    document.getElementById('iddatapublicacao3').readOnly = true;
+    document.getElementById('idpalchave3').readOnly = true;
+    document.getElementById('idMsgDialogo3').textContent = "";
+    if (document.getElementById('idSalvarNovo').value == "ENVIAR") {
         document.getElementById('idSalvarNovo').value = "SALVAR NOVO";
-     }
-     else if(document.getElementById('idEditar').value =="LER" ){
+    }
+    else if (document.getElementById('idEditar').value == "LER") {
         document.getElementById('idEditar').value = "EDITAR";
-     }
+    }
 }
 
-function excluir(){
-    if(confirm("O catalogo será excluir. Tem certeza que deja continuar essa operação ?")){
-        sendCatalogo("excluir");
+function excluir() {
+    if (document.getElementById('idpatrimonio3').value !== "") {
+        if (confirm("O catalogo será excluir. Tem certeza que deja continuar essa operação ?")) {
+            sendCatalogo("excluir");
+        }
+    }else {
+        document.getElementById('idMsgDialogo3').textContent = "Insira um catalogo antes de exclui-lo";
+    }
+}
+
+function UploadFile(){
+    if(document.getElementById('idpatrimonio3').value !== "" && document.getElementById('idInputTypeFile').value !== ""){
+        var file = document.getElementById('idInputTypeFile').files[0];
+        var patrimonio = document.getElementById('idpatrimonio3').value;
+        var DadosdoForm = new FormData();
+        DadosdoForm.append("arquivo",file);
+        DadosdoForm.append("patrimonio",patrimonio);
+        var ajaxRequest = new XMLHttpRequest();
+        ajaxRequest.open("POST", "servlet");
+        ajaxRequest.onreadystatechange =
+                function () {
+                    if (ajaxRequest.readyState === 4 && ajaxRequest.status === 200)
+                        document.getElementById('idMsgDialogo3').textContent = "O Arquivo foi enviado com sucesso !";
+                };
+        ajaxRequest.send(DadosdoForm);
+    }else{
+        if(document.getElementById('idpatrimonio3').value == ""){
+            document.getElementById('idMsgDialogo3').textContent = "Insira um catalogo antes de enviar um arquivo";
+            return null;
+        }
+        else if(document.getElementById('idInputTypeFile').value == ""){
+            document.getElementById('idMsgDialogo3').textContent = "Insira um arquivo antes de envia-lo";
+            return null;
+        }
     }
 }

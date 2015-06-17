@@ -165,7 +165,7 @@
                             <input type="button" value="Anterior" id="idItemAnterior" style="width:70px;" onclick="anterior();"/>&nbsp;&nbsp;#Patrimônio
                         </td>
                         <td align="left" colspan="2">
-                            <input type="text" id="idpatrimonio3" readonly/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;" onclick="proximo();"/>
+                            <input type="text" id="idpatrimonio3" readonly placeholder="Gerado automaricamente"/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;" onclick="proximo();"/>
                         </td>
                     </tr>
                     <tr>
@@ -210,7 +210,7 @@
                     </tr>
                     <tr>
                         <td align="right">
-                            <input type="button" value="SUBIR ARQUIVO"/>
+                            <input type="button" value="ENVIAR ARQUIVO" onclick="UploadFile();"/>
                         </td>
                         <td align="left" colspan="2">
                             <input type="file" id="idInputTypeFile"/>
@@ -219,9 +219,10 @@
                     <tr valign="top">
                         <td align="right">
                             Novo comentário
-                        </td>
+                        </td>                       
                         <td align="left" colspan="2">
-                            <textarea id="idNovoComentario" rows="6" cols="100"></textarea>
+                            <input type="text" id="idAutorComentario" placeholder="preencha o campo com seu nome"><br><br>                            
+                            <textarea id="idNovoComentario" rows="6" cols="100" placeholder="INSIRA O COMENTARIO"></textarea>
                         </td>
                     </tr>
                     <tr valign="top">
