@@ -128,9 +128,9 @@
                     </tr>
                     <tr>
                         <td align="center" colspan="3">
-                            <input type="button" value="Anterior" id="idPagAnterior" style="width:70px;"/>
+                            <input type="button" value="Anterior" id="idPagAnterior" style="width:70px;" onclick="ultimaPagina();"/>
                             <input type="text" id="idPaginaDestino" style="width:70px;text-align:center;">
-                            <input type="button" value="Próxima" id="idPagProxima" style="width:70px;"/>
+                            <input type="button" value="Próxima" id="idPagProxima" style="width:70px;" onclick="proximaPagina();"/>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -239,7 +239,7 @@
                         <td align="center" colspan="3">
                             <input type="button" id="idEditar" value="EDITAR" onclick="edit();"/>
                             <input type="button" id="idSalvarNovo" value="SALVAR NOVO" onclick="salvarNovo();"/>
-                            <input type="button" id="idSalvarAtual" value="SALVAR ATUAL" onclick="salvarAtual();"/>
+                            <input type="button" id="idSalvarAtual" value="SALVAR ATUAL" onclick="salvarAtual();" disabled="true"/>
                             <input type="button" id="idCancelar" value="CANCELAR" onclick="cancelar();" disabled="true"/>
                             
                         </td>
@@ -248,7 +248,7 @@
                         <td align="center" colspan="3">
                             <input type="button" id="idAbrirArquivo" value="ABRIR ARQUIVO" onclick=""/>
                             <input type="button" id="idLimparCat" value="LIMPAR" onclick="limparCatalogo();"/>
-                            <input type="button" id="idExcluir" value="EXCLUIR" onclick="excluir();"/>
+                            <input type="button" id="idExcluir" value="EXCLUIR" onclick="excluir();" disabled="true"/>
                         </td>
                     </tr>
                 </table>

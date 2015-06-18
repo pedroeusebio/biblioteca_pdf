@@ -46,8 +46,18 @@ public class Controller extends HttpServlet {
         ArrayList<JSONArray> answer = new ArrayList<JSONArray>();
         Biblioteca.setStrQuery("");
         String Query = "";
+        try{
+            if(JSONObject.getJsonObject("palchave").isEmpty() && JSONObject.getJsonObject("datapublicacao").isEmpty()
+                    && JSONObject.getJsonObject("veiculo").isEmpty() && JSONObject.getJsonObject("autoria").isEmpty()
+                            && JSONObject.getJsonObject("titulo").isEmpty() && JSONObject.getJsonObject("patrimonio").isEmpty()){
+                Query = "SELECT patrimonio FROM public.dadoscatalogo;";
+                
+            }
+        }catch(Exception e){
+            
+        }
         try {
-            if (!JSONObject.getString("patrimonio").isEmpty()) {
+            if (!JSONObject.getJsonObject("patrimonio").isEmpty()) {
                 dto.setPatrimonio(JSONObject.getString("patrimonio"));
                 if (Biblioteca.getStrQuery().isEmpty()) {
                     Query += "SELECT patrimonio FROM public.dadoscatalogo WHERE patrimonio='" + dto.getPatrimonio() + "' ";
@@ -125,6 +135,7 @@ public class Controller extends HttpServlet {
             }
         } catch (Exception e) {
         }
+        
         answer.addAll(Biblioteca.ExecuteQuery(Query));
 
         System.out.println(answer);

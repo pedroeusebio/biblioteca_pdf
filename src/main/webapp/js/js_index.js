@@ -1,8 +1,11 @@
+/* global self */
+
 var control;
 var respostaJSON;
 var editable;
 var respostaJSONcatalogo;
 var position;
+var n_pages;
 function iniciar() {
     $('#idDivCatalogacao').hide();
     $('#idDivBusca').hide();
@@ -19,7 +22,7 @@ function iniciar() {
         this.datapublicacaoE = document.getElementById('idcheckdatapublicacaoE');
         this.palchaveOU = document.getElementById('idcheckpalchaveOU');
         this.palchaveE = document.getElementById('idcheckpalchaveE');
-    }
+    };
     control = new controlOfChecks();
 
     control.patrimonio.addEventListener("click", function () {
@@ -186,6 +189,8 @@ function edit() {
         document.getElementById('idpalchave3').readOnly = false;
         document.getElementById('idSalvarNovo').disabled = true;
         document.getElementById('idCancelar').disabled = false;
+        document.getElementById('idExcluir').disabled = false;
+        document.getElementById('idSalvarAtual').disabled = false;
         document.getElementById('idMsgDialogo3').textContent = "EDITANDO !!";
         editable = true;
         document.getElementById('idEditar').value = "LER";
@@ -198,7 +203,8 @@ function edit() {
         document.getElementById('idpalchave3').readOnly = true;
         document.getElementById('idMsgDialogo3').textContent = "";
         document.getElementById('idSalvarNovo').disabled = false;
-        document.getElementById('idCancelar').disabled = true;
+        document.getElementById('idCancelar').disabled = true;        
+        document.getElementById('idSalvarAtual').disabled = true;        
         editable = false;
         document.getElementById('idEditar').value = "EDITAR";
     }
@@ -303,14 +309,16 @@ function fazerPedidoAJAX() {
                     console.log("resposta ajax : " + ajaxRequest.responseText);
                     respostaJSON = JSON.parse(ajaxRequest.responseText);
                     console.log(respostaJSON);
-                    if (respostaJSON[0] == null) {
+                    if (respostaJSON[0] === null) {
                         document.getElementById("idMsgDialogo2").textContent = "Catalogo não encontrado !";
                         document.getElementById("idTabelaResultados").textContent = "";
                     } else {
-                        for (var i = 0; i < respostaJSON.length; i++) {
                             document.getElementById("idMsgDialogo2").textContent = "Catalogo(s) encontrado(s) !";
-                            document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='#' onclick='carregarCatalogo(" + i + ");'> " + respostaJSON[i][1].titulo + "</a><br>");
-                        }
+                            if(respostaJSON.length < 3){ 
+                                Exibirpedido(0,respostaJSON.length);
+                            }else{
+                                Exibirpedido(0,5);
+                            }
                     }
 
                 }
@@ -319,9 +327,43 @@ function fazerPedidoAJAX() {
     // Envio do pedido
     ajaxRequest.send(data);
     //-------------------------
-    //document.getElementById('idTabelaResultados').textContent = "terminei pedido1";
 }
-
+function Exibirpedido(inicio,fim){
+    for (var i = inicio; i <fim;i ++){
+        if ((respostaJSON.length + 1) > i){
+        document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='#' onclick='carregarCatalogo(" + i + ");'> " + respostaJSON[i][1].titulo + "</a><br>");
+    }
+    }
+}
+function proximaPagina(){
+    if(document.getElementById('idPaginaDestino').value.trim() === ""){
+        document.getElementById('idPaginaDestino').value = 2;
+    }else{
+        document.getElementById('idPaginaDestino').value++;
+    }
+    document.getElementById('idTabelaResultados').innerHTML= "";
+    var inicio = 5 * (document.getElementById('idPaginaDestino').value.trim() -1);
+    if (inicio > respostaJSON.length -1){
+        document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
+    }
+    else{
+        Exibirpedido(inicio,inicio+5);
+    }
+}
+function ultimaPagina(){
+    if(document.getElementById('idPaginaDestino').value.trim() === "" || document.getElementById('idPaginaDestino').value.trim() < 1){
+        document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
+    }else{
+        document.getElementById('idPaginaDestino').value--;
+    }
+    document.getElementById('idTabelaResultados').innerHTML= "";
+    var fim = 5 * (document.getElementById('idPaginaDestino').value.trim() -1);
+    if (fim -5 < 0 ){
+        Exibirpedido(0,respostaJSON.length);
+    }else{
+        Exibirpedido(fim-5,fim);
+    }
+}
 function carregarCatalogo(i) {
     position = i;
     console.log("que deveria aparecer " + position);
@@ -336,6 +378,9 @@ function carregarCatalogo(i) {
     document.getElementById('iddatapublicacao3').value = respostaJSON[i][4].date;
     document.getElementById('idpalchave3').value = respostaJSON[i][6].palchave;
     document.getElementById('idComentarios').innerHTML = respostaJSON[i][7].comentarios;
+    if(respostaJSON[i][5].arquivo !== null){
+        document.getElementById('idAbrirArquivo').disabled = false;
+    }
     document.getElementById('idAbrirArquivo').onclick = function () {
         openFile(i);
     };
@@ -343,7 +388,7 @@ function carregarCatalogo(i) {
 }
 
 function openFile(i) {
-    if (respostaJSON[i][5].arquivo != null) {
+    if (respostaJSON[i][5].arquivo !== null) {
         self.location = "files/" + respostaJSON[i][5].arquivo;
     } else {
         document.getElementById("idMsgDialogo3").textContent = "Arquivo não encontrado";
@@ -366,7 +411,7 @@ function sendCatalogo(mode) {
                 if (ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
                     respostaJSONcatalogo = JSON.parse(ajaxRequest.responseText);
                     console.log("resposta catalogo: " + JSON.stringify(respostaJSONcatalogo));
-                    if (respostaJSONcatalogo == null) {
+                    if (respostaJSONcatalogo === null) {
                         document.getElementById("idMsgDialogo3").textContent = "Catalogo não enviado!";
                         document.getElementById("idTabelaResultados").textContent = "";
                     } else {
@@ -397,10 +442,11 @@ function anterior() {
 //------------------------------------------------------------------------------
 function salvarAtual() {
     sendCatalogo("atualizar");
+    edit();
 }
 
 function salvarNovo() {
-    if (document.getElementById("idSalvarNovo").value == "SALVAR NOVO") {
+    if (document.getElementById("idSalvarNovo").value === "SALVAR NOVO") {
         editable = true;
         document.getElementById('idpatrimonio3').value = "";
         document.getElementById('idtitulo3').readOnly = false;
@@ -435,10 +481,10 @@ function cancelar() {
     document.getElementById('iddatapublicacao3').readOnly = true;
     document.getElementById('idpalchave3').readOnly = true;
     document.getElementById('idMsgDialogo3').textContent = "";
-    if (document.getElementById('idSalvarNovo').value == "ENVIAR") {
+    if (document.getElementById('idSalvarNovo').value === "ENVIAR") {
         document.getElementById('idSalvarNovo').value = "SALVAR NOVO";
     }
-    else if (document.getElementById('idEditar').value == "LER") {
+    else if (document.getElementById('idEditar').value === "LER") {
         document.getElementById('idEditar').value = "EDITAR";
     }
 }
@@ -469,11 +515,11 @@ function UploadFile(){
                 };
         ajaxRequest.send(DadosdoForm);
     }else{
-        if(document.getElementById('idpatrimonio3').value == ""){
+        if(document.getElementById('idpatrimonio3').value === ""){
             document.getElementById('idMsgDialogo3').textContent = "Insira um catalogo antes de enviar um arquivo";
             return null;
         }
-        else if(document.getElementById('idInputTypeFile').value == ""){
+        else if(document.getElementById('idInputTypeFile').value === ""){
             document.getElementById('idMsgDialogo3').textContent = "Insira um arquivo antes de envia-lo";
             return null;
         }

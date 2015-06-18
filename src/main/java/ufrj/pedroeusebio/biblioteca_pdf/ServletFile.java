@@ -8,6 +8,8 @@ package ufrj.pedroeusebio.biblioteca_pdf;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,11 +35,11 @@ public class ServletFile extends HttpServlet {
         boolean UploadedFile = false;
         String fileName = null;
         String patrimonio = null;
-        Part part = null;
+         javax.servlet.http.Part part = null;
         PrintWriter out = response.getWriter();
         try {
-            ArrayList parts = (ArrayList) request.getParts();
-            patrimonio = request.getParameter("patrimonio");
+             Collection<Part> parts =request.getParts();
+             patrimonio = request.getParameter("patrimonio");
             Iterator itr = parts.iterator();
             while (itr.hasNext()) {
                 part = (Part) itr.next();
