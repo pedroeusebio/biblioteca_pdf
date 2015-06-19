@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/biblioteca_pdf">
-  <Resource auth="Container" driverClassName="org.postgresql.Driver" name="jdbc/biblio_db" password="pedror@fa95pr" removeAbandoned="true" removeAbandonedTimeout="60" type="javax.sql.DataSource" url="jdbc:postgresql://localhost:5432/biblio_db" username="postgres"/>
+  <Resource auth="Container" driverClassName="org.postgresql.Driver" name="jdbc/biblio_db" password="abracadabra" removeAbandoned="true" removeAbandonedTimeout="60" type="javax.sql.DataSource" url="jdbc:postgresql://localhost:5432/biblio_db" username="postgres"/>
 </Context>
