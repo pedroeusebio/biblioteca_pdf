@@ -3,6 +3,9 @@
     background-color:#eeeeee;
     margin:0px;
     font-family:arial;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
 #idDivMaisExterna {
@@ -79,4 +82,7 @@ input[type="text"]{
 #idInputTypeFile {
     width:555px;
     background-color:white;
+}
+#iddatapublicacao2{
+    margin-right: 400px;
 }

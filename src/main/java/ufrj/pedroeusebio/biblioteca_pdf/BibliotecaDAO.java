@@ -94,7 +94,7 @@ public class BibliotecaDAO {
     }
 
     //Implementing all write at the database -------------------------------------------------------------------------------------------------------------------------------------
-    public boolean updateDatebase(RespostaDTO dto) {
+    public void updateDatebase(RespostaDTO dto) {
         try {
             DbInfo database = new DbInfo();
             database.DadoBanco();
@@ -109,9 +109,7 @@ public class BibliotecaDAO {
             PreparedStatement pstmt = con.prepareStatement(query);
             ResultSet rst = pstmt.executeQuery();
             con.close();
-            return true;
         } catch (Exception e) {
-            return false;
         }
 
     }
@@ -189,7 +187,7 @@ public class BibliotecaDAO {
             if (rst != null && rst.next()) {
                 patrimonio = (int) rst.getLong(1);
             }
-            if (dto.getPalchave() != null) {
+            if (!dto.getPalchave().trim().isEmpty()) {
                 String[] parts = dto.getPalchave().replaceAll("\\s", "").split(";");
                 for (int i = 0; i < parts.length; i++) {
                     query = "INSERT INTO public.palavras_chave (palchave,patrimonio) VALUES ('"
@@ -198,7 +196,7 @@ public class BibliotecaDAO {
                     pstmtPalchave.executeUpdate();
                 }
             }
-            if (dto.getComentario() != null) {
+            if (!dto.getComentario().trim().isEmpty()) {
                 query = "INSERT INTO public.comentarios (comentario,patrimonio) VALUES ('"
                         + dto.getComentario() + "','" + patrimonio + "');";
                 PreparedStatement pstmtComentario = con.prepareStatement(query);

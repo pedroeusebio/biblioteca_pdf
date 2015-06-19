@@ -98,7 +98,7 @@ function mostrarDiv(i) {
 }
 
 function limparbusca() {
-    document.getElementById('idpatrimonio2').value = " ";
+    document.getElementById('idpatrimonio2').value = "";
     document.getElementById('idcheckpatrimonio').checked = false;
     document.getElementById('idtitulo2').value = " ";
     document.getElementById('idchecktituloOU').checked = false;
@@ -203,8 +203,8 @@ function edit() {
         document.getElementById('idpalchave3').readOnly = true;
         document.getElementById('idMsgDialogo3').textContent = "";
         document.getElementById('idSalvarNovo').disabled = false;
-        document.getElementById('idCancelar').disabled = true;        
-        document.getElementById('idSalvarAtual').disabled = true;        
+        document.getElementById('idCancelar').disabled = true;
+        document.getElementById('idSalvarAtual').disabled = true;
         editable = false;
         document.getElementById('idEditar').value = "EDITAR";
     }
@@ -217,6 +217,7 @@ function limparCatalogo() {
         document.getElementById('idveiculo3').value = "";
         document.getElementById('iddatapublicacao3').value = "";
         document.getElementById('idpalchave3').value = "";
+        document.getElementById('idAutorComentario').value = "";
         document.getElementById('idNovoComentario').value = "";
         document.getElementById('idComentarios').innerHTML = "";
     }
@@ -267,12 +268,9 @@ function modeloCatalogo(mode) {
     } else {
         catalogo.palchave = document.getElementById('idpalchave3').value;
     }
-    if (document.getElementById('idNovoComentario').value !== "" &&
-            document.getElementById('idNovoComentario').value !== " ") {
-        if (document.getElementById('idAutorComentario').value === "" &&
-                document.getElementById('idAutorComentario').value === " ") {
+    if (document.getElementById('idNovoComentario').value.trim() !== "" && document.getElementById('idNovoComentario').value !== " ") {
+        if (document.getElementById('idAutorComentario').value === "" && document.getElementById('idAutorComentario').value === " ") {
             document.getElementById('idMsgDialogo3').textContent = "Insira o seu nome como autor";
-            console.log(document.getElementById('idNovoComentario').value !== "");
             return null;
         } else {
             catalogo.novocomentario = document.getElementById("idAutorComentario").value + "\n" + document.getElementById('idNovoComentario').value;
@@ -313,12 +311,13 @@ function fazerPedidoAJAX() {
                         document.getElementById("idMsgDialogo2").textContent = "Catalogo não encontrado !";
                         document.getElementById("idTabelaResultados").textContent = "";
                     } else {
-                            document.getElementById("idMsgDialogo2").textContent = "Catalogo(s) encontrado(s) !";
-                            if(respostaJSON.length < 3){ 
-                                Exibirpedido(0,respostaJSON.length);
-                            }else{
-                                Exibirpedido(0,5);
-                            }
+                        document.getElementById("idMsgDialogo2").textContent = "Catalogo(s) encontrado(s) !";
+                        document.getElementById('idPaginaDestino').value = 1;
+                        if (respostaJSON.length < 3) {
+                            Exibirpedido(0, respostaJSON.length);
+                        } else {
+                            Exibirpedido(0, 5);
+                        }
                     }
 
                 }
@@ -328,46 +327,66 @@ function fazerPedidoAJAX() {
     ajaxRequest.send(data);
     //-------------------------
 }
-function Exibirpedido(inicio,fim){
-    for (var i = inicio; i <fim;i ++){
-        if ((respostaJSON.length + 1) > i){
-        document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='#' onclick='carregarCatalogo(" + i + ");'> " + respostaJSON[i][1].titulo + "</a><br>");
-    }
-    }
-}
-function proximaPagina(){
-    if(document.getElementById('idPaginaDestino').value.trim() === ""){
-        document.getElementById('idPaginaDestino').value = 2;
-    }else{
-        document.getElementById('idPaginaDestino').value++;
-    }
-    document.getElementById('idTabelaResultados').innerHTML= "";
-    var inicio = 5 * (document.getElementById('idPaginaDestino').value.trim() -1);
-    if (inicio > respostaJSON.length -1){
-        document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
-    }
-    else{
-        Exibirpedido(inicio,inicio+5);
+function Exibirpedido(inicio, fim) {
+    for (var i = inicio; i < fim; i++) {
+        if ((respostaJSON.length + 1) > i) {
+            document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='#' onclick='carregarCatalogo(" + i + ");'> " + respostaJSON[i][1].titulo + "</a><br>");
+        }
     }
 }
-function ultimaPagina(){
-    if(document.getElementById('idPaginaDestino').value.trim() === "" || document.getElementById('idPaginaDestino').value.trim() < 1){
+function proximaPagina() {
+    document.getElementById('idPaginaDestino').value++;
+    document.getElementById('idTabelaResultados').innerHTML = "";
+    var inicio = 5 * (document.getElementById('idPaginaDestino').value.trim() - 1);
+    if (inicio > respostaJSON.length - 1) {
         document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
-    }else{
+    }
+    else {
+        Exibirpedido(inicio, inicio + 5);
+    }
+}
+function ultimaPagina() {
+    if (document.getElementById('idPaginaDestino').value.trim() < 2) {
+        document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
+    } else {
+        document.getElementById('idMsgDialogo2').textContent = "";
         document.getElementById('idPaginaDestino').value--;
     }
-    document.getElementById('idTabelaResultados').innerHTML= "";
-    var fim = 5 * (document.getElementById('idPaginaDestino').value.trim() -1);
-    if (fim -5 < 0 ){
-        Exibirpedido(0,respostaJSON.length);
-    }else{
-        Exibirpedido(fim-5,fim);
+    document.getElementById('idTabelaResultados').innerHTML = "";
+    var fim = 5 * (document.getElementById('idPaginaDestino').value.trim() - 1);
+    if (fim > respostaJSON.length) {
+        document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
+    } else {
+        if (fim - 5 < 0) {
+            Exibirpedido(0, respostaJSON.length);
+        } else {
+            Exibirpedido(fim - 5, fim);
+        }
+    }
+}
+function procurarPagina(e) {
+    var code = e.keyCode;
+    if (code === 13) {
+        var page = document.getElementById('idPaginaDestino').value;
+        if (page < 1) {
+            document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
+            document.getElementById('idTabelaResultados').innerHTML = "";
+        } else {
+            var inicio = 5 * (page - 1);
+            if (inicio > respostaJSON.length - 1) {
+                document.getElementById('idMsgDialogo2').textContent = "Pagina não encontrada !";
+                document.getElementById('idTabelaResultados').innerHTML = "";
+            }
+            else {
+                document.getElementById('idTabelaResultados').innerHTML = "";
+                Exibirpedido(inicio, inicio + 5);
+            }
+        }
     }
 }
 function carregarCatalogo(i) {
     position = i;
-    console.log("que deveria aparecer " + position);
-    console.log("catalogo atual é " + position);
+    limparCatalogo();
     document.getElementById("idMsgDialogo3").textContent = "";
     document.getElementById("idAutorComentario").value = "";
     document.getElementById("idNovoComentario").value = "";
@@ -378,7 +397,7 @@ function carregarCatalogo(i) {
     document.getElementById('iddatapublicacao3').value = respostaJSON[i][4].date;
     document.getElementById('idpalchave3').value = respostaJSON[i][6].palchave;
     document.getElementById('idComentarios').innerHTML = respostaJSON[i][7].comentarios;
-    if(respostaJSON[i][5].arquivo !== null){
+    if (respostaJSON[i][5].arquivo !== null) {
         document.getElementById('idAbrirArquivo').disabled = false;
     }
     document.getElementById('idAbrirArquivo').onclick = function () {
@@ -425,18 +444,21 @@ function sendCatalogo(mode) {
     ajaxRequest.send(data);
 }
 // NAO ESTA FUNCIONANDO DEVIDAMENTE !! -----------------------------------------
-function proximo() {
-    console.log("buscando catalogo " + (position + 1));
-    if (position + 1 < respostaJSON.length) {
-        carregarCatalogo(position + 1);
-        position += 1;
+function proximoCatalogo() {
+    if (position >= (respostaJSON.length - 1)) {
+        console.log('entrei!');
+        document.getElementById("idMsgDialogo3").textContent = "Catalogo não encontrado!";
+    } else {
+        position++;
+        carregarCatalogo(position);
     }
 }
-function anterior() {
-    console.log("buscando catalogo " + position - 1);
-    if (position - 1 >= 0) {
-        carregarCatalogo(position - 1);
-        position -= 1;
+function ultimoCatalogo() {
+    if (position <= 0) {
+        document.getElementById("idMsgDialogo3").textContent = "Catalogo não encontrado!";
+    } else {
+        position--;
+        carregarCatalogo(position);
     }
 }
 //------------------------------------------------------------------------------
@@ -494,18 +516,18 @@ function excluir() {
         if (confirm("O catalogo será excluir. Tem certeza que deja continuar essa operação ?")) {
             sendCatalogo("excluir");
         }
-    }else {
+    } else {
         document.getElementById('idMsgDialogo3').textContent = "Insira um catalogo antes de exclui-lo";
     }
 }
 
-function UploadFile(){
-    if(document.getElementById('idpatrimonio3').value !== "" && document.getElementById('idInputTypeFile').value !== ""){
+function UploadFile() {
+    if (document.getElementById('idpatrimonio3').value !== "" && document.getElementById('idInputTypeFile').value !== "") {
         var file = document.getElementById('idInputTypeFile').files[0];
         var patrimonio = document.getElementById('idpatrimonio3').value;
         var DadosdoForm = new FormData();
-        DadosdoForm.append("arquivo",file);
-        DadosdoForm.append("patrimonio",patrimonio);
+        DadosdoForm.append("arquivo", file);
+        DadosdoForm.append("patrimonio", patrimonio);
         var ajaxRequest = new XMLHttpRequest();
         ajaxRequest.open("POST", "servlet");
         ajaxRequest.onreadystatechange =
@@ -514,12 +536,12 @@ function UploadFile(){
                         document.getElementById('idMsgDialogo3').textContent = "O Arquivo foi enviado com sucesso !";
                 };
         ajaxRequest.send(DadosdoForm);
-    }else{
-        if(document.getElementById('idpatrimonio3').value === ""){
+    } else {
+        if (document.getElementById('idpatrimonio3').value === "") {
             document.getElementById('idMsgDialogo3').textContent = "Insira um catalogo antes de enviar um arquivo";
             return null;
         }
-        else if(document.getElementById('idInputTypeFile').value === ""){
+        else if (document.getElementById('idInputTypeFile').value === "") {
             document.getElementById('idMsgDialogo3').textContent = "Insira um arquivo antes de envia-lo";
             return null;
         }

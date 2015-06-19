@@ -29,7 +29,7 @@ public class DbInfo {
     public void DadoBanco(){
         url = "jdbc:postgresql://localhost:5432/biblio_db";
         usuario = "postgres";
-        senha = "pedror@fa95pr";
+        senha = "abracadabra";
     }
     
 }

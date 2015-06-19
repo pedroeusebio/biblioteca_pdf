@@ -96,7 +96,7 @@
                             Data da publicação
                         </td>
                         <td align="left" colspan="2">
-                            <input type="text"     id="iddatapublicacao2"/>
+                            <input type="date"     id="iddatapublicacao2"/>
                             <input type="checkbox" id="idcheckdatapublicacaoOU"/>(OU)
                             <input type="checkbox" id="idcheckdatapublicacaoE"/>(E)
                         </td>
@@ -129,7 +129,7 @@
                     <tr>
                         <td align="center" colspan="3">
                             <input type="button" value="Anterior" id="idPagAnterior" style="width:70px;" onclick="ultimaPagina();"/>
-                            <input type="text" id="idPaginaDestino" style="width:70px;text-align:center;">
+                            <input type="text" id="idPaginaDestino" style="width:70px;text-align:center;" onkeypress="return procurarPagina(event);">
                             <input type="button" value="Próxima" id="idPagProxima" style="width:70px;" onclick="proximaPagina();"/>
                         </td>
                     </tr>
@@ -162,10 +162,10 @@
                     </tr>
                     <tr>
                         <td align="right">
-                            <input type="button" value="Anterior" id="idItemAnterior" style="width:70px;" onclick="anterior();"/>&nbsp;&nbsp;#Patrimônio
+                            <input type="button" value="Anterior" id="idItemAnterior" style="width:70px;" onclick="ultimoCatalogo();"/>&nbsp;&nbsp;#Patrimônio
                         </td>
                         <td align="left" colspan="2">
-                            <input type="text" id="idpatrimonio3" readonly placeholder="Gerado automaricamente"/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;" onclick="proximo();"/>
+                            <input type="text" id="idpatrimonio3" readonly placeholder="Gerado automaricamente"/>&nbsp;&nbsp;<input type="button" value="Próximo" id="idItemProximo" style="width:70px;" onclick="proximoCatalogo();"/>
                         </td>
                     </tr>
                     <tr>
@@ -197,7 +197,7 @@
                             Data da publicação
                         </td>
                         <td align="left" colspan="2">
-                            <input type="text" id="iddatapublicacao3" readonly/>
+                            <input type="date" id="iddatapublicacao3" readonly/>
                         </td>
                     </tr>
                     <tr>

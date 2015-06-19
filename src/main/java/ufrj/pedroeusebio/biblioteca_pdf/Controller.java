@@ -6,17 +6,11 @@
 package ufrj.pedroeusebio.biblioteca_pdf;
 
 import java.io.BufferedReader;
-import static java.io.FileDescriptor.out;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import javax.json.*;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -25,7 +19,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class Controller extends HttpServlet {
 
@@ -43,7 +36,7 @@ public class Controller extends HttpServlet {
         JsonObject innerObj;
         RespostaDTO dto = new RespostaDTO();
         BibliotecaDAO Biblioteca = new BibliotecaDAO();
-        ArrayList<JSONArray> answer = new ArrayList<JSONArray>();
+        ArrayList<JSONArray> answer = new ArrayList<>();
         Biblioteca.setStrQuery("");
         String Query = "";
         try{
@@ -138,7 +131,6 @@ public class Controller extends HttpServlet {
         
         answer.addAll(Biblioteca.ExecuteQuery(Query));
 
-        System.out.println(answer);
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.print(answer);

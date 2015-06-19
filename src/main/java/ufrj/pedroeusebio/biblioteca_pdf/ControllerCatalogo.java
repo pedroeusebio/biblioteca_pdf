@@ -57,6 +57,8 @@ public class ControllerCatalogo extends HttpServlet {
                 dto.setPalchave(JSONObject.getString("palchave"));
             }
             if (!JSONObject.getString("novocomentario").isEmpty()) {
+                System.out.println("entrei !!");
+                System.err.println("novo comentario = "+JSONObject.getString("novocomentario"));
                 String[] parts = JSONObject.getString("novocomentario").split("\n");
                 String comentario = "<span style=\"color:blue;\">" + parts[0] + "</span><br>" + parts[1] + "<br><hr>";
                 dto.setComentario(comentario);
@@ -67,10 +69,12 @@ public class ControllerCatalogo extends HttpServlet {
         if (JSONObject.getString("mode").equalsIgnoreCase("atualizar")) {
             try {
                 biblioteca.updateDatebase(dto);
-                if (!dto.getPalchave().isEmpty()) {
+                if (!dto.getPalchave().trim().isEmpty()) {
                     biblioteca.updateDbPalchave(dto);
                 }
-                if (!dto.getComentario().isEmpty()) {
+                if (!dto.getComentario().trim().isEmpty()) {
+                    System.out.println("entrei !!1");
+                    System.out.println("novo comentario = "+dto.getComentario());
                     biblioteca.updateDbComentario(dto);
                 }
             } catch (Exception e) {
