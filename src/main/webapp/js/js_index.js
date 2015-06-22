@@ -191,6 +191,7 @@ function edit() {
         document.getElementById('idCancelar').disabled = false;
         document.getElementById('idExcluir').disabled = false;
         document.getElementById('idSalvarAtual').disabled = false;
+        document.getElementById('idEnviarArquivo').disabled = false;
         document.getElementById('idMsgDialogo3').textContent = "EDITANDO !!";
         editable = true;
         document.getElementById('idEditar').value = "LER";
@@ -204,6 +205,7 @@ function edit() {
         document.getElementById('idMsgDialogo3').textContent = "";
         document.getElementById('idSalvarNovo').disabled = false;
         document.getElementById('idCancelar').disabled = true;
+        document.getElementById('idEnviarArquivo').disabled = true;
         document.getElementById('idSalvarAtual').disabled = true;
         editable = false;
         document.getElementById('idEditar').value = "EDITAR";
@@ -330,7 +332,8 @@ function fazerPedidoAJAX() {
 function Exibirpedido(inicio, fim) {
     for (var i = inicio; i < fim; i++) {
         if ((respostaJSON.length + 1) > i) {
-            document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='#' onclick='carregarCatalogo(" + i + ");'> " + respostaJSON[i][1].titulo + "</a><br>");
+            console.log(respostaJSON);
+            document.getElementById("idTabelaResultados").insertAdjacentHTML('beforeend', "<a href='#' onclick='carregarCatalogo(" + i + ");'> "+respostaJSON[i][0].patrimonio+"- "+ respostaJSON[i][1].titulo +". "+ respostaJSON[i][2].autoria +" - "+respostaJSON[i][4].date +"</a><br>");
         }
     }
 }
@@ -496,6 +499,7 @@ function cancelar() {
     document.getElementById('idSalvarAtual').disabled = false;
     document.getElementById('idSalvarNovo').disabled = false;
     document.getElementById('idCancelar').disabled = true;
+    document.getElementById('idEnviarArquivo').disabled = true;
     editable = false;
     document.getElementById('idtitulo3').readOnly = true;
     document.getElementById('idautoria3').readOnly = true;

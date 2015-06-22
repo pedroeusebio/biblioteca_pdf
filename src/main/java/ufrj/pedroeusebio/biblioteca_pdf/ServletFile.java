@@ -35,19 +35,20 @@ public class ServletFile extends HttpServlet {
         boolean UploadedFile = false;
         String fileName = null;
         String patrimonio = null;
-         javax.servlet.http.Part part = null;
+        javax.servlet.http.Part part = null;
         PrintWriter out = response.getWriter();
         try {
-             Collection<Part> parts =request.getParts();
-             patrimonio = request.getParameter("patrimonio");
+            Collection<Part> parts = request.getParts();
+            patrimonio = request.getParameter("patrimonio");
             Iterator itr = parts.iterator();
             while (itr.hasNext()) {
                 part = (Part) itr.next();
                 if (part.getName().compareTo("arquivo") == 0) {
                     fileName = extractFileName(part, patrimonio);
-                    String path = this.getServletContext().getRealPath("");
-                    String pathAux[] = path.split("/biblioteca_pdf/");
-                    String filePath = pathAux[0] + "/biblioteca_pdf/src/main/webapp/files/" + fileName;
+//                    String path = this.getServletContext().getRealPath("");
+//                    String pathAux[] = path.split("/biblioteca_pdf/");
+//                    String filePath = pathAux[0] + "/biblioteca_pdf/src/main/webapp/files/" + fileName;
+                    String filePath = "/home/pedroeusebio/NetBeansProjects/biblioteca_pdf/src/main/webapp/files" + fileName;
                     System.out.println(filePath);
                     System.out.println(fileName);
                     BibliotecaDAO biblioteca = new BibliotecaDAO();
@@ -74,32 +75,29 @@ public class ServletFile extends HttpServlet {
     }// </editor-fold>
 
     private String extractFileName(Part part, String patrimonio) {
-        String numberAux = patrimonio;
+        String aux_patrimonio = patrimonio;
         String contentDisp = part.getHeader("content-disposition");
         String[] items = contentDisp.split(";");
         for (String s : items) {
 
             if (s.trim().startsWith("filename")) {
-                System.out.println(s);
                 for (int i = patrimonio.length(); i < 6; i++) {
-                    numberAux = '0' + numberAux;
+                    aux_patrimonio = '0' + aux_patrimonio;
                 }
-                String aux = s.substring(11, s.length() - 1);
-                System.out.println(aux);
                 String ext = "";
+                String aux = s.substring(11, s.length() - 1);                
                 for (int j = aux.length() - 1; j >= 0; j--) {
                     if (aux.charAt(j) != '.') {
-                        String aux2 = ext;
-                        ext = aux.charAt(j) + aux2;
+                        String aux_ext = ext;
+                        ext = aux.charAt(j) + aux_ext;
                     } else {
                         break;
                     }
                 }
-                numberAux += "." + ext;
+                aux_patrimonio += "." + ext;
             }
         }
-        System.out.println(numberAux);
-        return numberAux;
+        return aux_patrimonio;
     }
 
 }
